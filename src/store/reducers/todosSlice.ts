@@ -1,4 +1,4 @@
-import { Item } from '../index';
+import { Item, REQUEST_STATUS } from '../index';
 import { Action, ACTION_TYPES } from '../actions';
 
 // these are mutators
@@ -32,10 +32,14 @@ function moveDown(list: Item[], id: string): Item[] {
 
 export type TodosSlice = {
   list: Item[];
+  requestState: REQUEST_STATUS;
+  error: string;
 };
 
 export const todosInitialState: TodosSlice = {
-  list: []
+  list: [],
+  requestState: REQUEST_STATUS.IDLE,
+  error: ''
 };
 
 export function todosReducer(state = todosInitialState, action: Action): TodosSlice {
@@ -85,6 +89,17 @@ export function todosReducer(state = todosInitialState, action: Action): TodosSl
         ...state,
         list: moveDown(state.list, action.payload)
       };
+    }
+
+    case ACTION_TYPES.SET_REQUEST_STATUS: {
+      return {
+        ...state,
+        requestState: action.payload
+      };
+    }
+
+    case ACTION_TYPES.SET_ERROR: {
+      return { ...state, error: action.payload };
     }
 
     default:

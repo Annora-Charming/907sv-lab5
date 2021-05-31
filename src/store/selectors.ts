@@ -16,14 +16,12 @@ export function filterListByFilterState(list: Item[], filterState: FILTER_STATE)
 
 export function filterListBySubstring(list: Item[], substringValue: string): Item[] {
   if (substringValue.length !== 0) {
-    return list.filter(item =>
-      item.title.toLowerCase().includes(substringValue.toLowerCase())
-    );
+    return list.filter(item => item.title.toLowerCase().includes(substringValue.toLowerCase()));
   }
   return list;
 }
 
-export function getFilteredList(store:Store): Item[] {
+export function getFilteredList(store: Store): Item[] {
   return filterListByFilterState(
     filterListBySubstring(store.todos.list, store.filter.substringValue),
     store.filter.filterState

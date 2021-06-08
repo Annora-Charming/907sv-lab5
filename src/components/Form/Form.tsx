@@ -1,7 +1,8 @@
 import React, { FormEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ACTION_TYPES } from '../../store/actions';
+import { ACTION_TYPES, addNewItem, setRequestStatus } from '../../store/actions';
 import { Store } from '../../store';
+import { REQUEST_STATUS, TodosSlice } from '../../store/reducers/todosSlice';
 
 function Form() {
   const list = useSelector((state: Store) => state.todos.list);
@@ -17,9 +18,11 @@ function Form() {
     if (list.some(item => item.title.toLowerCase() === inputValue.toLowerCase())) {
       return setErrorMessage('You already have such deed (>_<)');
     }
+
     setErrorMessage('');
     setInputValue('');
-    return dispatch({ type: ACTION_TYPES.ADD, payload: inputValue.trim() });
+    // return dispatch({ type: ACTION_TYPES.ADD, payload: inputValue.trim() });
+    return dispatch(addNewItem(inputValue.trim()));
     // trim для обрезки пробелов в начале и конце
   }
 

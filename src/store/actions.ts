@@ -1,6 +1,7 @@
 import { FILTER_STATE } from './reducers/filterSlice';
-import { AppDispatch, REQUEST_STATUS } from './index';
+import { AppDispatch, Item } from './index';
 import api from '../api';
+import { REQUEST_STATUS } from './reducers/todosSlice';
 
 export const ACTION_TYPES = {
   ADD: 'add',
@@ -16,7 +17,7 @@ export const ACTION_TYPES = {
 
 export interface ActionAdd {
   type: typeof ACTION_TYPES.ADD;
-  payload: string;
+  payload: Item;
 }
 
 export interface ActionDelete {
@@ -73,7 +74,21 @@ export const addNewItem = (title: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(setRequestStatus(REQUEST_STATUS.LOADING));
     const result = await api.todos.add({ title });
+    console.log("That's in the result", result);
     dispatch({ type: ACTION_TYPES.ADD, payload: result });
+    dispatch(setRequestStatus(REQUEST_STATUS.SUCCESS));
+  } catch (err) {
+    dispatch(setError(err.message));
+    dispatch(setRequestStatus(REQUEST_STATUS.ERROR));
+  }
+};
+
+export const getAllItems = () => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(setRequestStatus(REQUEST_STATUS.LOADING));
+    const result = await api.todos.list();
+    // dispatch({}) what's the action to get them all?
+    //dispatch({ type: ACTION_TYPES.ADD_ALL, payload: result });
     dispatch(setRequestStatus(REQUEST_STATUS.SUCCESS));
   } catch (err) {
     dispatch(setError(err.message));

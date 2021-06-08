@@ -1,8 +1,9 @@
 import ListItem from './ListItem';
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
-import { makeTestStore, testRender } from '../../setupTests';
+import { makeTestStore, mockStore, testRender } from '../../setupTests';
 import { ACTION_TYPES } from '../../store/actions';
+import { initialState } from '../../store';
 
 const listItemTitle = "I'm title";
 const listItemId = "I'm ListItem Id";
@@ -27,16 +28,18 @@ describe(' Тесты ListItem > Title ', () => {
 
 describe(' Тесты ListItem > Delete Button ', () => {
   test(' Отображение кнопки Delete, вызов deleteAction с id ', () => {
-    const store = makeTestStore();
+    const store = mockStore(initialState);
     testRender(<ListItem item={falsyTestListItem} />, { store });
     const button = screen.getByTestId('delete-button');
     expect(button).toBeInTheDocument();
     expect(store.dispatch).not.toBeCalled();
     fireEvent.click(button);
-    expect(store.dispatch).toBeCalledWith({
-      type: ACTION_TYPES.DELETE,
-      payload: falsyTestListItem.id
-    });
+    expect(store.getActions()).toEqual([
+      {
+        type: ACTION_TYPES.DELETE,
+        payload: falsyTestListItem.id
+      }
+    ]);
   });
 });
 

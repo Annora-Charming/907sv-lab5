@@ -1,7 +1,9 @@
 import { screen, fireEvent } from '@testing-library/react';
 import Form from './Form';
-import { makeTestStore, testRender } from '../../setupTests';
+import { makeTestStore, mockStore, testRender } from '../../setupTests';
 import { ACTION_TYPES } from '../../store/actions';
+import { REQUEST_STATUS } from '../../store/reducers/todosSlice';
+import { initialState } from '../../store';
 
 describe(' Тесты Form > input и addButton', () => {
   test(' Отображение поля для ввода и кнопки для добавления ', () => {
@@ -15,7 +17,7 @@ describe(' Тесты Form > input и addButton', () => {
 
   test(' Вызов addAction с value введенным в поле ввода ', () => {
     const inputValueText = 'Praise the Cat';
-    const store = makeTestStore();
+    const store = mockStore(initialState);
     testRender(<Form />, { store });
     const inputField = screen.getByPlaceholderText('Enter a deed');
     const addButton = screen.getByTestId("I'm addButton");
@@ -23,9 +25,9 @@ describe(' Тесты Form > input и addButton', () => {
       target: { value: inputValueText }
     });
     fireEvent.click(addButton);
-    expect(store.dispatch).toBeCalledWith({
-      type: ACTION_TYPES.ADD,
-      payload: inputValueText
+    expect(store.getActions()[0]).toEqual({
+      type: ACTION_TYPES.SET_REQUEST_STATUS,
+      payload: REQUEST_STATUS.LOADING
     });
   });
 

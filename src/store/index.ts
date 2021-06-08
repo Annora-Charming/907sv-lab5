@@ -10,13 +10,6 @@ export interface Item {
   title: string;
 }
 
-export enum REQUEST_STATUS {
-  IDLE,
-  LOADING,
-  SUCCESS,
-  ERROR
-}
-
 export type Store = {
   todos: TodosSlice;
   filter: FilterSlice;

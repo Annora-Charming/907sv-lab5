@@ -1,5 +1,12 @@
-import { Item, REQUEST_STATUS } from '../index';
+import { Item } from '../index';
 import { Action, ACTION_TYPES } from '../actions';
+
+export enum REQUEST_STATUS {
+  IDLE,
+  LOADING,
+  SUCCESS,
+  ERROR
+}
 
 // these are mutators
 function moveUp(list: Item[], id: string): Item[] {
@@ -45,14 +52,9 @@ export const todosInitialState: TodosSlice = {
 export function todosReducer(state = todosInitialState, action: Action): TodosSlice {
   switch (action.type) {
     case ACTION_TYPES.ADD: {
-      const newElement = {
-        id: Math.random().toString(36).substr(2),
-        isChecked: false,
-        title: action.payload
-      };
       return {
         ...state,
-        list: [...state.list, newElement]
+        list: [...state.list, action.payload]
       };
     }
 
